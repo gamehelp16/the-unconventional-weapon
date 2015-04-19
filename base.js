@@ -1,0 +1,285 @@
+
+$(document).ready(function() {
+
+	intro=1; //1
+	missiontoggle=false;
+	missionnumber=1; //1
+	pet="x0"; //c=cat, d=dog, 1=low quality, 2=medium quality, 3=high quality, x0
+	money=250; //250
+	gadget="none"; //"none"
+	
+	missions=[];
+	missions.push({"title":"Secret Message", "desc":"Just play the game lol."});
+	missions.push({"title":"Finish the intro", "desc":"Because we are going to play the game!"});
+	missions.push({"title":"The kitten itself", "desc":"We can just search for images of kittens, but wouldn't it be better if we took the picture by ourselves? So, let's buy a kitten!"});
+	missions.push({"title":"A Camera", "desc":"Now we have got the kitten, we need a camera to take a picture of it."});
+	missions.push({"title":"Cheese!", "desc":"We are almost finished! You just need to take a picture of the kitten and get the developed image and we are ready to kill the person!"});
+	missions.push({"title":"Kill!", "desc":"Great! Now we have everything we needed. It's time to kill the person! To do so, simply click the bucket on the wishing well."});
+	missions.push({"title":"Congrats!", "desc":"Well, congratulations for completing this little game! I hope you enjoy! :D Also I decided to give you an extra $5000!"});
+	
+	$(document).keyup(function(e) {
+		if(e.keyCode==13 && intro!=5 && intro<12)intro++,$(".intro-"+intro).fadeIn(1000);
+		if(intro==10)missionnumber=1,mission('new'),$("#mission").animate({"top": "-"+($("#mission").height()+32)+"px"},2000);
+	});
+	
+	$(document).mousemove(function(e) {
+		$("#photo").css({"top":(e.pageY-13)+"px","left":(e.pageX+2)+"px"});
+	});
+	
+	$(".intro-5 input").click(function() {
+		if(intro==5)$(".button-number").html($(this).val());
+		intro=6;
+		$(".intro-"+intro).fadeIn(1000);
+	});
+	
+	$(".mission-button").click(function() {
+		if(missiontoggle) {
+			$("#mission").animate({"top": "-"+($("#mission").height()+32)+"px"},500);
+			missiontoggle=false;
+		}
+		else {
+			$("#mission").animate({"top": "-1px"},500);
+			missiontoggle=true;
+		}
+	});
+	
+	$(".finish-intro").click(function() {
+		mission('complete',1);
+		intro++;
+		$("#intro").fadeOut(1000);
+		setTimeout(update,1000);
+	});
+	
+	$(".head").click(function() {
+		mission('complete',5);
+		map('map');
+		$('*').css('cursor','inherit');
+		$('#photo').hide();
+		money+=5000;
+		update();
+	});
+	
+	$(".building").mousemove(function(e) {
+		$("#tooltip").html($(this).attr("title")).css({"top":(e.pageY-30)+"px","left":(e.pageX+15)+"px"});
+	});
+	
+	$(".building").mouseout(function(e) {
+		$("#tooltip").html("").css("top","-1000px");
+	});
+	
+	$(".protection").mouseover(function(e) {
+		$("#person").css({"top":getRandomInt(150,innerHeight-200)+"px","left":getRandomInt(150,innerWidth-200)+"px"});
+	});
+	
+	for(i=0;i<30;i++) {
+		for(j=0;j<112;j++) {
+			if(Math.random()<0.05){$("#map").append("~");}else{$("#map").append(" ");}
+		}
+		$("#map").append("<br>");
+	}
+	map('map');
+	mission('new');
+	update();
+	
+});
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function update() {
+	if(intro==13)$("#intro").hide(),$("#game, #stats").show(),$("#mission").css("top","-"+($("#mission").height()+32)+"px");
+	$("#stats").html("Money: $"+money+" | Pet: "+pettype()+" | Gadget: "+gadget);
+}
+
+function map(a) {
+	$("#map, #petshop, pre.building, #welldialog, #homedialog, #battle").hide().css("opacity",1);
+	$("#tooltip").css("opacity",1);
+	$(".well").css({"bottom":"50px", "left":"300px", "cursor":"pointer"});
+	if(a=="map") {
+		$("#map, pre.building").show();
+	}
+	else if(a=="petshop") {
+		$("#petshop").show();
+		$("#petshopdialog").css("top","45px").html('Welcome to the pet shop!<br>What do you want to do?<br><input type="button" value="Buy or sell a pet" onclick="map(\'buysellpet\')"> <input type="button" value="Go back" onclick="map(\'map\')">');
+	}
+	else if(a=="buysellpet") {
+		$("#petshop").show();
+		if(pet=="x0") {
+			$("#petshopdialog").css("top","20px").html('You don\'t seem to have a pet yet, would you like to buy one?<br><input type="button" value="Low quality kitten" onclick="buypet(\'c1\')">($100) <input type="button" value="Medium quality kitten" onclick="buypet(\'c2\')">($200) <input type="button" value="High quality kitten" onclick="buypet(\'c3\')">($300)<br><input type="button" value="Low quality puppy" onclick="buypet(\'d1\')">($100) <input type="button" value="Medium quality puppy" onclick="buypet(\'d2\')">($200) <input type="button" value="High quality puppy" onclick="buypet(\'d3\')">($300)<br>Lower quality animals are more likely to disobey its master, but it is cheaper.<br><input type="button" value="Go back" onclick="map(\'map\')">');
+		}
+		else {
+			$("#petshopdialog").css("top","50px").html('You have a '+pettype()+', would you like to sell it for 3/4 of the price?<br><input type="button" value="Sell the pet" onclick="sellpet()">or <input type="button" value="Go back" onclick="map(\'map\')">');
+		}
+	}
+	else if(a=="well") {
+		$("#map, .well, #welldialog").show();
+		$("#map, #tooltip").css("opacity",0);
+		$(".well").css({"bottom":"275px", "left":"20px", "cursor":"default"});
+		if(gadget=="none") {
+			if(pet.split("")[0]!="x") {
+				$("#welldialog").css({"top":"40px", "left":"275px"}).html('Hi there, young wanderer! What is your wish?<br>(You can only wish once!)<br><input type="button" value="A DSLR Camera" onclick="wish(1)"> <input type="button" value="An Instant Camera" onclick="wish(2)"><br><input type="button" value="A Nexus 6" onclick="wish(3)"> <input type="button" value="An iPhone 6" onclick="wish(4)"> <input type="button" value="An Oculus Rift" onclick="wish(5)"><br><input type="button" value="Nothing" onclick="wish(6)"> <input type="button" value="Go back" onclick="map(\'map\')">');
+			}
+			else {
+				$("#welldialog").css({"top":"40px", "left":"275px"}).html('To make a wish you need to have a pet! (Weird, right?)<br><input type="button" value="Go back" onclick="map(\'map\')">');
+			}
+		}
+		else {
+			$("#welldialog").css({"top":"40px", "left":"275px"}).html('You have gotten what you wish, don\'t be greedy!<br><input type="button" value="Go back" onclick="map(\'map\')">');
+		}
+	}
+	else if(a=="home") {
+		if((gadget=="none" || gadget=="Nothing") && pet=="x0") {
+			$("#homedialog").show().css({"top":"30px", "left":"50px"}).html('It definitely feels nice to come back home, but what can you do? Nothing.<br><input type="button" value="Go back" onclick="map(\'map\')">');
+		}
+		else if((gadget=="none" || gadget=="Nothing") && pet!="x0") {
+			$("#homedialog").show().css({"top":"30px", "left":"50px"}).html('<div class="a">It definitely feels nice to come back home, but what can you do?<br><input type="button" value="Play with pet" onclick="$(\'.a\').html(\'Haha! Playing with pet is fun!\')"></div><input type="button" value="Go back" onclick="map(\'map\')">');
+		}
+		else if((gadget=="An Instant Camera" || gadget=="A DSLR Camera") && pet!="x0") {
+			$("#homedialog").show().css({"top":"30px", "left":"50px"}).html('<div class="a">It definitely feels nice to come back home, but what can you do?<br><input type="button" value="Play with pet" onclick="$(\'.a\').html(\'Haha! Playing with pet is fun!\')"></div><input type="button" value="Take a picture of the pet" onclick="takepicture()" class="takepetpicture"><br><input type="button" value="Go back" onclick="map(\'map\')">');
+		}
+		else if(!(gadget=="none" || gadget=="Nothing") && pet!="x0") {
+			$("#homedialog").show().css({"top":"30px", "left":"50px"}).html('<div class="a">It definitely feels nice to come back home, but what can you do?<br><input type="button" value="Play with pet" onclick="$(\'.a\').html(\'Haha! Playing with pet is fun!\')"><br><input type="button" value="Play with gadget" onclick="$(\'.a\').html(\'Dang, it\\\'s no fun! :/\')"></div><input type="button" value="Go back" onclick="map(\'map\')">');
+		}
+	}
+	else if(a=="battle") {
+		$("*").css("cursor","none");
+		$("#photo").show();
+		$("#battle").show();
+		$("#person").css({"top":"200px","left":"200px"});
+	}
+}
+
+function mission(a,b) {
+	if(a=="complete") {
+		if(missionnumber==b) {
+			$("#mission-complete").html("Mission Complete: <b>"+missions[missionnumber].title+"</b>").animate({"top": "-1px"},200);
+			missionnumber++;
+			mission('new');
+			setTimeout(function(){$("#mission-complete").animate({"top": "-42px"},200);},3000);
+			update();
+		}
+	}
+	else if(a=="new") {
+		if(missionnumber!=6)$(".mission-title").html("Mission #"+missionnumber+": "+missions[missionnumber].title);
+		if(missionnumber==6)$(".mission-title").html(missions[missionnumber].title);
+		$(".mission-desc").html(missions[missionnumber].desc);
+		update();
+	}
+}
+
+function pettype() {
+	pet2=pet.split("");
+	output="";
+	if(pet2[0]=="x")return "none";
+	if(pet2[1]==1)output="Low quality";
+	if(pet2[1]==2)output="Medium quality";
+	if(pet2[1]==3)output="High quality";
+	if(pet2[0]=="c")output=output+" kitten";
+	if(pet2[0]=="d")output=output+" puppy";
+	return output;
+}
+
+function buypet(a) {
+	b=a;
+	a=a.split("");
+	output="";
+	if(a[1]==1)price=100;
+	if(a[1]==2)price=200;
+	if(a[1]==3)price=300;
+	if(a[1]==1)output="low quality";
+	if(a[1]==2)output="medium quality";
+	if(a[1]==3)output="high quality";
+	if(a[0]=="c")output=output+" kitten";
+	if(a[0]=="d")output=output+" puppy";
+	if(money>=price) {
+		if(confirm("Buy a "+output+" for $"+price+"?")) {
+			pet=b;
+			money-=price;
+			map('buysellpet');
+			update();
+			if(a[0]=="c")mission('complete',2);
+		}
+	}
+	else {
+		alert('Not enough money!');
+	}
+}
+
+function sellpet() {
+	b=pet;
+	a=pet.split("");
+	output="";
+	if(a[1]==1)price=100;
+	if(a[1]==2)price=200;
+	if(a[1]==3)price=300;
+	if(a[1]==1)output="low quality";
+	if(a[1]==2)output="medium quality";
+	if(a[1]==3)output="high quality";
+	if(a[0]=="c")output=output+" kitten";
+	if(a[0]=="d")output=output+" puppy";
+	if(confirm("Sell your "+output+" for $"+(3/4*price)+"?"))pet="x0",money+=(3/4*price),map('buysellpet'),update();
+}
+
+function wish(a) {
+	item="";
+	if(a==1)item="A DSLR Camera";
+	if(a==2)item="An Instant Camera";
+	if(a==3)item="A Nexus 6";
+	if(a==4)item="An iPhone 6";
+	if(a==5)item="An Oculus Rift";
+	if(a==6)item="Nothing";
+	if(confirm("Are you sure you want to wish for "+item+"?\n(Remember, you can only wish once!)")) {
+		gadget=item;
+		map('well');
+		update();
+		if(a==1 || a==2)mission('complete',3);
+	}
+}
+
+function takepicture() {
+	b=pet;
+	a=pet.split("");
+	chance=0;
+	if(a[1]==1)chance=0.01;
+	if(a[1]==2)chance=0.1;
+	if(a[1]==3)chance=0.3;
+	if(Math.random()<chance) {
+	
+		if(a[0]=="c" && a[1]==3)$(".a").html("The kitten looks fabulous!<br><br> /\\     /\\<br>{  `---'  }<br>{  O   O  }<br>~~>  V  <~~<br> \\  \\|/  /<br>  `-----'____<br>  /     \\    \\_<br> {       }\\  )_\\_   _<br> |  \\_/  |/ /  \\_\\_/ )<br>  \\__/  /(_/     \\__/<br>    (__/");
+		if(a[0]=="c" && a[1]==2)$(".a").html("That's a bad pose! But I guess it will work fine...<br><br>         __..--''``---....___   _..._    __<br>     _.-'    .-/\";  `        ``<._  ``.''_ `.<br> _.-' _..--.'_    \                    `( ) )<br>(_..-'    (< _     ;_..__               ; `'<br>           `-._,_)'      ``--...____..-'");
+		if(a[1]==1)$(".a").html("Just the tail?! All this hardwork is just for a picture of a tail?! Come on.<br>I hope it will work. :(<br><br>...___..--';)<br>,--...--'''");
+		/* Kittens ASCII Art from: http://www.asciiworld.com/-Cats-.html */
+		
+		if(a[0]=="d" && a[1]==3)$(".a").html("Woof! Clever puppy!<br><br>         __<br>        /  \\<br>       / ..|\\<br>      (_\\  |_)<br>      /  \\@'<br>     /     \\<br>_   /  `   |<br>\\\\/  \\  | _\\<br> \\   /_ || \\\\_<br>  \\____)|_) \\_)<br>");
+		if(a[0]=="d" && a[1]==2)$(".a").html("Hey! No need to be angry!<br><br> ____|\\<br>`-/    \\<br> (\\_/)  \\<br> /_  _   |<br> \\/_/||) /<br>    '---'");
+		/* Puppies ASCII Art from: http://www.asciiworld.com/-Cats-.html */
+		
+		if(gadget=="A DSLR Camera")$(".a").append("<br><br>Unfortunately I can't develop the image :(");
+		if(gadget=="An Instant Camera" && a[0]=="c")mission('complete',4);
+		$(".well").addClass("clickable");
+		$(".takepetpicture").hide();
+	}
+	else {
+		c=Math.random();
+		if(c<0.3) {
+			$(".a").html("The pet doesn't seem to like being photographed.");
+		}
+		else if(c<0.5) {
+			$(".a").html("The pet runs so fast!");
+		}
+		else if(c<0.7) {
+			$(".a").html("The pet is so hard to find!");
+		}
+		else {
+			$(".a").html("The pet hides under the chair!");
+		}
+		$(".takepetpicture").val("Try Again");
+	}
+}
+
+function themomentoftruth() {
+	if(missionnumber==5) {
+		map('battle');
+	}
+}
