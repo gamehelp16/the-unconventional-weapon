@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>The Unconventional Weapon</title>
+	<link rel="stylesheet" type="text/css" href="style.css" media="all" />
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="base.js"></script>
+</head>
+<body>
+
+	<div id="intro">
+		<div class="intro-1">Hi there. <i style="color:gray;">(Press enter to continue)</i></div>
+		<div class="intro-2">You are needed to kill someone.</div>
+		<div class="intro-3">But the theme of Ludum Dare this time forces you to use an uncoventional weapon.</div>
+		<div class="intro-4">Don't worry, I found this <a href="https://www.reddit.com/r/AskReddit/comments/32ffaz/name_a_thing_that_cant_be_used_as_a_murder_weapon/" target="_blank">AskReddit</a> thread that helps me finding an unconventional weapon for you.</div>
+		<div class="intro-5">
+			Here are 5 buttons, press one of them.<br>
+			The button you press will determine your unconventional weapon, choose wisely.<br>
+			<input type="button" value="1"> <input type="button" value="2"> <input type="button" value="3"> <input type="button" value="4"> <input type="button" value="5">
+		</div>
+		<div class="intro-6">You pressed button number <b class="button-number">0</b>. And your unconventional weapon is...</div>
+		<div class="intro-7"><b>A picture of a Kitten!</b> (<a href="https://www.reddit.com/r/AskReddit/comments/32ffaz/name_a_thing_that_cant_be_used_as_a_murder_weapon/cqaorfu" target="_blank">Thanks to this comment</a>)</div>
+		<div class="intro-8">Lol, actually all buttons determine the same weapon.</div>
+		<div class="intro-9">So, no matter what button you press you will get the same weapon.</div>
+		<div class="intro-10">Now, onto the serious part.</div>
+		<div class="intro-11">Click the 'mission' button on the top right corner of your screen to view your current mission.</div>
+		<div class="intro-12">Good Luck.<br><input type="button" value="Finish the intro" class="finish-intro"><br><br><b>WARNING:</b> This game has no save feature. But don't worry, this is a short game.</div>
+	</div>
+	
+	<div id="game">
+		<pre id="map"></pre>
+		<div id="petshop">
+			<pre id="petshopbg">
+    
+    
+      _  
+    _|_|_      
+     ( ) 
+     /|\ 
+      |  
+     / \ 
+	 
+     
+                                                                  _
+                              __                                 _V.-o 
+                     \ ______/ V`-,                             / |`-'
+                      }        /~~                             (7_\\
+                     /_)^ --,r'
+                    |b      |b
+
+                     
+   /\_/\                                `. ---)..(
+   >^.^<.---.                             ||||(,o)      
+  _'-`-'     )\                           "`'" \__/
+ (6--\ |--\ (`.`-.
+     --'  --'  ``-'
+                                                                                |\/| ---- _
+                                                                               =(--)=_____ \
+                                                                               c___ (______/
+     
+
+            </pre>
+		<!-- Dogs ASCII Art from: http://www.ascii-art.de/ascii/def/dogs.txt
+		                          http://www.asciiworld.com/-Dogs-.html
+			 Cats ASCII Art from: http://www.ascii-art.de/ascii/c/cat.txt
+								  http://www.asciiworld.com/-Cats-.html -->
+			<pre id="petshopdialog"></pre>
+		</div>
+		<div id="home">
+			<pre id="homedialog"></pre>
+		</div>
+		<pre class="building pet-shop" title="Pet Shop" onclick="map('petshop')">
+                _      
+    ___________|=|_    
+   /               \   
+  /_________________\  
+  |                 |  
+  |    PET SHOP     |  
+()|     _     __    |()
+()|    | |   |__|   |()
+()|____|_|__________|()
+^^^^^^^^^^^^^^^^^^^^^^^
+</pre>
+		<pre class="building house" title="My House" onclick="map('home')">
+       _                
+     _|=|__________      
+    /              \     
+   /                \    
+  /__________________\   
+   ||  || /--\ ||  ||    
+   ||[]|| | .| ||[]||    
+ ()||__||_|__|_||__||()  
+( )|-|-|-|====|-|-|-|( ) 
+^^^^^^^^^^====^^^^^^^^^^^
+</pre>
+<!-- House ASCII Art from: http://ascii.co.uk/art/hut -->
+		<pre class="building well" title="Wishing Well" onclick="if(missionnumber<5)map('well');">
+        .----------------.
+       / =_ ^   =   _  = \
+      /_=_^___-^__=___=_^_\
+       __||___ <span onclick="themomentoftruth()">___</span> ___||_
+       `=||===<span onclick="themomentoftruth()">//_\\</span>===||=
+         ||_.-<span onclick="themomentoftruth()">|___|</span>-._||
+         |'-._______.-'|
+         ||_ |  __] _]_|
+         |_|_ |_ ]__[_ |
+         `"-........--"`
+</pre>
+		<pre id="welldialog"></pre>
+<!-- Wishing well ASCII Art from http://www.retrojunkie.com/asciiart/building/plumbing.htm (modified) -->
+		<div id="battle">
+			<pre>Use the kitten picture (your cursor) to kill the person by clicking his head!<br>But he seem to have some protection in his body and his helmet that allows him to teleport when you touch them. Try trespassing the protection.<br><input type="button" value="I give up" onclick="map('map');$('*').css('cursor','inherit');
+		$('#photo').hide();"></pre>
+			<pre id="person">
+<span class="protection">   _   </span>
+<span class="protection">  |</span><span class="head"">O</span><span class="protection">|  </span>
+<span class="protection">  /|\  </span>
+<span class="protection">   |   </span>
+<span class="protection">  / \  </span></pre>
+		</div>
+	</div>
+	
+	<div id="mission">
+		<b class="mission-title">Mission #0: Mission Title</b><br>
+		<span class="mission-desc">Mission Description.</span><br>
+		<input type="button" value="Mission" class="mission-button">
+	</div>
+	
+	<div id="mission-complete">Mission Complete: <b>Mission Title</b></div>
+	<div id="stats"></div>
+	<div id="tooltip"></div>
+	<div id="bg"></div>
+	<pre id="photo"> /\_/\ 
+( o o )
+==_Y_==
+  `-'  
+</pre>
+	
+</body>
+</html>
