@@ -34,18 +34,18 @@
 			<pre id="petshopbg">
     
     
-      _  
-    _|_|_      
+     <span onclick="achievement(4)"> _ </span> 
+    <span onclick="achievement(4)">_|_|_</span>      
      ( ) 
      /|\ 
       |  
      / \ 
 	 
-     
-                                                                  _
-                              __                                 _V.-o 
-                     \ ______/ V`-,                             / |`-'
-                      }        /~~                             (7_\\
+	 
+                                                               *     v
+                              __                                \ _ ('_.
+                     \ ______/ V`-,                              ( )( )
+                      }        /~~                               (\  ))
                      /_)^ --,r'
                     |b      |b
 
@@ -68,7 +68,33 @@
 			<pre id="petshopdialog"></pre>
 		</div>
 		<div id="home">
+			<pre id="homebg">
+			
+			
+ .-="""""""""""=-.
+ | . . . . . . . |
+ | .'.'.'.'.'.'. |
+()____ _____ ____()
+||____I_____I____||
+||_______________||
+ W               W
+</pre>
+			<!-- Sofa ASCII Art from: http://www.retrojunkie.com/asciiart/building/sofas.htm -->
 			<pre id="homedialog"></pre>
+			<pre id="workdialog">Working is easy, you just need to type things you are told to within the time limit to earn money. The time limit will be faster as you move on, but you will get paid more.
+			
+If the time limit is over, you will not receive the money you earned that session.
+To actually receive the money you earned, just press 'escape', but this means you have to start over.
+
+Type anything in the textbox below to start.
+
+<input type="text" class="work-text">
+Type: '<span class="work-type">(start working first)</span>'                     Time: <span class="work-time">0</span>
+
+<span class="work-paid"></span>
+
+<input type="button" value="Go back" onclick="work('stop')">
+</pre>
 		</div>
 		<pre class="building pet-shop" title="Pet Shop" onclick="map('petshop')">
                 _      
@@ -125,6 +151,17 @@
 		<b class="mission-title">Mission #0: Mission Title</b><br>
 		<span class="mission-desc">Mission Description.</span><br>
 		<input type="button" value="Mission" class="mission-button">
+	</div>
+	
+	<div id="achievements">
+		<input type="button" value="Achievements" class="achievement-button">
+		You can't get all achievements at once.
+		<div id="achievement-list">
+			<div class="the-achievement">
+				<b>Achievement Title</b><br>
+				Achievement Description.
+			</div>
+		</div>
 	</div>
 	
 	<div id="mission-complete">Mission Complete: <b>Mission Title</b></div>
