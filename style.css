@@ -533,6 +533,13 @@ input[type=button]:hover {
 	background:rgba(0,0,0,.1);
 }
 
+input[type=text] {
+	border:1px solid black;
+	font-family:inherit;
+	font-size:inherit;
+	margin-bottom:5px;
+}
+
 #intro {
 	margin:100px;
 	font-family:monospace;
@@ -567,6 +574,25 @@ input[type=button]:hover {
 	border-top: 1px solid white;
 	right:25px;
 	margin-top:15px;
+	padding:5px;
+}
+
+#achievements {
+	position:absolute;
+	right:30px;
+	bottom:-1000px;
+	background:white;
+	z-index:99999999;
+	border:1px solid black;
+	padding:15px;
+	width:250px;
+}
+
+#achievements input {
+	position:absolute;
+	border-bottom: 1px solid white;
+	right:25px;
+	top:-37px;
 	padding:5px;
 }
 
@@ -637,7 +663,7 @@ pre.well {
 	left:100px;
 }
 
-#welldialog, #homedialog {
+#welldialog, #homedialog, #workdialog {
 	position:absolute;
 }
 
@@ -668,4 +694,25 @@ pre.well {
 	background:white;
 	z-index:9999999;
 	width:75px;
+}
+
+#homedialog {
+	top:25px;
+	left:175px;
+}
+
+#workdialog {
+	top:25px;
+	left:175px;
+	display:none;
+}
+
+#achievement-list {
+	max-height:300px;
+	overflow:auto;
+	margin-top:10px;
+}
+
+.the-achievement:not(:last-child) {
+	margin-bottom:20px;
 }
