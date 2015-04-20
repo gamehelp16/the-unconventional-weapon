@@ -1,4 +1,2 @@
-# The unconventional weapon
-This is my attempt at LD #32
-
-To be honest I'm not really sure if Ascii Art also includes as art most of the ascii arts aren't created by me.
+# The Unconventional Weapon
+Please go to the <a href="https://github.com/gamehelp16/the-unconventional-weapon/tree/gh-pages">gh-pages</a> branch to view the files.
